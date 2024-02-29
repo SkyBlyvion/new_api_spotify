@@ -1,0 +1,27 @@
+name: api-symfony-7-spotify
+recipe: symfony
+config:
+  php: '8.2'
+  via: nginx
+  webroot: public
+services:
+  database:
+    type: mysql
+    portforward: 3307
+    creds:
+      user: admin
+      password: admin
+      database: api_symfony
+  node:
+    type: node:18
+    build:
+      - yarn install
+      - npm install
+tooling:
+  yarn:
+    service: node
+  node:
+    service: node
+  npm:
+    service: node
+

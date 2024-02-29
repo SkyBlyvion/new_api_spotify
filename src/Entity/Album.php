@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use Doctrine\DBAL\Types\Types;
@@ -17,6 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     normalizationContext: ['groups' => ['album:read']],
     denormalizationContext: ['groups' => ['album:write']]
+)]
+
+#[ApiFilter(
+    BooleanFilter::class, properties: [
+        
+    ]
 )]
 
 // on ajoute des filtres

@@ -4,14 +4,36 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
 use App\Repository\ArtistRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    //on va déclarer des groupes de serialisation et de deserialisation
+    normalizationContext: ['groups' => ['artist:read']],
+    denormalizationContext: ['groups' => ['artist:write']]
+)]
+#[ApiFilter(
+    SearchFilter::class, properties: [
+        'name' => 'ipartial',
+        'id' => 'exact',
+        'biography' => 'ipartial',
+        'albums.title' => 'ipartial',
+        'albums.genre.label' => 'iexact',
+        'albums.songs.title' => 'ipartial',
+        ]
+)]
+#[ApiFilter(
+    BooleanFilter::class, properties: [
+        'albums.isActive'
+    ]
+)]
 
 class Artist
 {

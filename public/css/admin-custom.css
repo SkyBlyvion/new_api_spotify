@@ -1,0 +1,8 @@
+#main-menu .menu .menu-item.has-submenu:not(.expanded) .submenu {
+    max-height: none !important; /* Override max-height to always show submenu */
+    overflow: visible !important;
+}
+
+#main-menu .menu .menu-item.has-submenu .submenu-toggle-icon {
+    transform: rotate(90deg) !important; /* Adjust icon to indicate expanded state */
+}

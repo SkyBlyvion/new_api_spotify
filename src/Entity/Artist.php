@@ -51,7 +51,7 @@ class Artist
     #[Groups(['album:read', 'artist:read', 'user:read'])]
     private ?string $biography = null;
 
-    #[ORM\OneToMany(mappedBy: 'artist', targetEntity: Album::class)]
+    #[ORM\OneToMany(mappedBy: 'artist', targetEntity: Album::class, cascade: ['remove'], orphanRemoval: true)]
     #[Groups(['artist:read'])]
     private Collection $albums;
 

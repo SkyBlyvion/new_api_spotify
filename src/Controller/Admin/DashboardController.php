@@ -10,6 +10,7 @@ use App\Controller\Admin\GenreCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
@@ -66,4 +67,14 @@ class DashboardController extends AbstractDashboardController
         ]);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
+
+    public function configureAssets(): Assets
+    {
+        return parent::configureAssets()
+            ->addCssFile('css/admin-custom.css');
+    }
+
+
+    
+    
 }

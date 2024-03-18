@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -51,4 +52,32 @@ class RegistrationController extends AbstractController
         );
         
     }
+
+    #[Route('/check-password', name: 'app_check_password', methods: ['GET','POST'])]
+    public function checkPassword(
+            // on récupére les données du formulaire react
+            Request $request,
+            // on rcupére le service d'encodage de mdp
+            UserPasswordHasherInterface $userPasswordHasher,
+            // on récupére le repo de user
+            UserRepository $userRepository
+        ): Response{
+            $data = json_decode($request->getContent(), true);
+            $id = $data['id'];
+            $password = $data['password'];
+            $user = $userRepository->find($id);
+            $isPasswordValid = $userPasswordHasher->isPasswordValid($user, $password);
+            if($isPasswordValid){
+                return $this->json([
+                    'message' => 'Mot de passe valide',
+                    'response' => true
+                ]);
+            }else{
+                return $this->json([
+                    'message' => 'Mot de passe invalide',
+                    'response' => false
+                ]);
+            }
+        }
+
 }

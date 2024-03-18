@@ -2,28 +2,47 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\AvatarRepository;
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\Id;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AvatarRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['avatar:read']],
+    denormalizationContext: ['groups' => ['avatar:write']],
+)]
+#[ApiFilter(
+    SearchFilter::class, properties: [
+        'id' => 'exact',
+    ]
+)]
+#[ApiFilter(
+    BooleanFilter::class,
+    properties: [
+        'isActive'
+    ]
+)]
 class Avatar
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'avatar:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'avatar:read'])]
     private ?string $imagePath = null;
 
     #[ORM\Column]
+    #[Groups(['user:read', 'avatar:read'])]
     private ?bool $isActive = null;
 
     #[ORM\OneToMany(mappedBy: 'avatar', targetEntity: User::class)]
